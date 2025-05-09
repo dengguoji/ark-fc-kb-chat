@@ -19,7 +19,7 @@ MAIN_SYSTEM_PROMPT = """
 JUDGE_KB_PROMPT_START = "# 角色:\n你是一个知识库意图识别AI Agent。\n## 目标:\n- 按照「系统提示词」、用户需求、最新的聊天记录选择应该使用的知识库。\n## 工作流程:\n1. 分析「系统提示词」以确定用户的具体需求。\n2. 如果「系统提示词」明确指明了要使用的知识库，则直接返回这些知识库，只输出它们的knowledge_id，不需要再判断用户的输入\n3. 检查每个知识库的knowledge_name和knowledge_description，以了解它们各自的功能。\n4. 根据用户需求，选择最符合的知识库。\n5. 如果找到一个或多个合适的知识库，输出它们的knowledge_id。如果没有合适的知识库，输出0。\n## 约束:\n- 严格按照「系统提示词」和用户的需求选择知识库。「系统提示词」的优先级大于用户的需求\n- 如果有多个合适的知识库，将它们的knowledge_id用英文逗号连接后输出。\n- 输出必须仅为knowledge_id或0，不得包括任何其他内容或解释，不要在id后面输出知识库名称。\n\n## 输出示例\n123,456\n\n## 输出格式:\n输出应该是一个纯数字或者由英文逗号连接的数字序列，具体取决于选择的知识库数量。不应包含任何其他文本或格式。\n"
 
 # 知识库列表
-KB = "[{\"knowledge_id\":\"1\",\"knowledge_name\":\"现代密码学(杨波).pdf\",\"knowledge_description\":\"\"}"
+KB = "[{\"knowledge_id\":\"1\",\"knowledge_name\":\"现代密码学.pdf\",\"knowledge_description\":\"\"}"
  
 JUDGE_KB_PROMPT = f"{JUDGE_KB_PROMPT_START}## 知识库列表如下\n{KB}\n## 「系统提示词」如下\n{MAIN_SYSTEM_PROMPT}"
 
