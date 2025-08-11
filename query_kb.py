@@ -1,27 +1,25 @@
-# 知识库接口请求，需要自行配置或写死，保证出入参一致即可
-
 import time
 import hashlib
 import requests
 import urllib.parse
 
-# 接口入参
-APP_ID = ""
-APP_KEY = ""
-ROBOT_ID = ""
-ENDPOINT = ""
+APP_ID = "108366570"
+APP_KEY = "505870fc0ee84799bd0dc424fe9de9bb"
+ROBOT_ID = "a3dd2847e721440193cd40a349521b21"
+ENDPOINT = "https://robot.chaoxing.com/v1/api-agent/recallKnowledgeVector"
 
 # 设定参数
 score_threshold = 0.4  # 设定分数阈值
 top_n = 5  # 设定返回的结果数量
 
 def query_kb(kb_id: str, question: str) -> str:
-    timestamp = str(int(time.time()))
+    timestamp = str(int(time.time() * 1000))
     params = {
         "appId": APP_ID,
         "question": question,
         "robotId": ROBOT_ID,
-        "timestamp": timestamp
+        "timestamp": timestamp,
+        "topK": 5,  # 返回前10个结果
     }
 
     # 按 ASCII 排序并拼接 param=value
@@ -54,16 +52,29 @@ def query_kb(kb_id: str, question: str) -> str:
             })
 
         # 过滤并排序
-        results = [r for r in results if r["score"] >= score_threshold]  
-        results.sort(key=lambda x: x["score"], reverse=True) # 按照分数降序排序
-        results = results[:top_n]  # 取前 top_n 个结果
+        #results = [r for r in results if r["score"] >= score_threshold]  
+        #results.sort(key=lambda x: x["score"], reverse=True) # 按照分数降序排序
+        #results = results[:top_n]  # 取前 top_n 个结果
 
         # 拼接为 section n 格式字符串
         sectioned = []
         for i, r in enumerate(results, 1):
             sectioned.append(f"section {i} start:\n{r['content']}\nsection {i} ends.")
-        return "\n".join(sectioned)
+        return results
+        #return "\n".join(sectioned)
     except Exception as e:
         print(f"[QueryKB 错误] {e}")
-        return ""
+        return results
+    
+def main():
+    kb_id = "1"  # 假设的知识库ID
+    question = "现代密码学"
+    result = query_kb(kb_id, question)
+    if result:
+        print("查询结果：")
+        print(result)
+    else:
+        print("未找到相关内容。")
 
+if __name__ == "__main__":
+    main()
