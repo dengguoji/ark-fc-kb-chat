@@ -1,29 +1,38 @@
 import ark_client
-from tool_executor import execute_function_call  # 导入真实执行器
-from judge_kb import judge_need_kb # 导入判断模型
-from query_kb import query_kb  # 导入知识库查询函数
+from tool_executor import execute_function_call
+from judge_kb import judge_need_kb
+from query_kb import query_kb
 from prompts import *
 
 def process_messages(messages):
     stream = ark_client.stream_chat(messages)
-
     current_assistant_content = ""
+    current_reasoning_content = ""
     current_tool_calls = {}
 
-    print("\nassistant：", end="", flush=True)
+    print("\n\n====== ASSISTANT ======\n", end="", flush=True)
 
-    # 处理流式输出chunk
     for chunk in stream:
         if not chunk.choices:
             continue
-
         choice = chunk.choices[0]
         delta = choice.delta
 
-        if delta.content:
+        # reasoning_content 流式输出
+        if hasattr(delta, "reasoning_content") and delta.reasoning_content:
+            if current_reasoning_content == "":
+                print("\n\n[reasoning_content] ", end="\n", flush=True)
+            print(delta.reasoning_content, end="", flush=True)
+            current_reasoning_content += delta.reasoning_content
+
+        # content 流式输出
+        if getattr(delta, "content", None):
+            if current_assistant_content == "":
+                print("\n\n[content] ", end="", flush=True)
             print(delta.content, end="", flush=True)
             current_assistant_content += delta.content
 
+        # 工具调用逻辑保持不变
         if delta.tool_calls:
             for tool_call in delta.tool_calls:
                 index = tool_call.index
@@ -38,26 +47,31 @@ def process_messages(messages):
                     }
                 current_tool_calls[index]["function"]["arguments"] += tool_call.function.arguments or ""
 
-    # FC小循环
+    # 判断是否有工具调用
     if current_tool_calls:
+        tool_calls_list = []
         for call in current_tool_calls.values():
-            messages.append({
-                "role": "assistant",
-                "content": current_assistant_content if current_assistant_content.strip() else "",
-                "tool_calls": [
-                    {
-                        "id": call["id"],
-                        "type": call["type"],
-                        "function": {
-                            "name": call["function"]["name"],
-                            "arguments": call["function"]["arguments"]
-                        }
-                    }
-                ]
+            tool_calls_list.append({
+                "id": call["id"],
+                "type": call["type"],
+                "function": {
+                    "name": call["function"]["name"],
+                    "arguments": call["function"]["arguments"]
+                }
             })
 
-            execution_result = execute_function_call(call)
-            print(f"\ntool：{execution_result}")
+        messages.append({
+            "role": "assistant",
+            "content": current_assistant_content.strip(),
+            "tool_calls": tool_calls_list
+        })
+
+        for call in current_tool_calls.values():
+            try:
+                execution_result = execute_function_call(call)
+            except Exception as e:
+                execution_result = f"工具执行异常: {str(e)}"
+            print(f"\n\n====== TOOL ({call['function']['name']}) ======\n{execution_result}")
 
             messages.append({
                 "role": "tool",
@@ -65,23 +79,15 @@ def process_messages(messages):
                 "content": execution_result
             })
 
-            # 链式递归调用，继续处理模型可能生成的新工具调用
-            process_messages(messages)
+        process_messages(messages)
+
     else:
         if current_assistant_content.strip():
             messages.append({
                 "role": "assistant",
-                "content": current_assistant_content
+                "content": current_assistant_content.strip()
             })
         print("\n" + "-"*50)
-
-    # 测试打印当前消息列表
-"""    print("\n" + "=" * 50)
-    print("当前消息列表:")
-    for i, message in enumerate(messages):
-        print(f"{i+1}. {message['role']}: {message.get('content', '')}")
-    print("=" * 50)"""
-
 def chat_loop(enable_kb=True):
     messages = [
         {
@@ -93,7 +99,7 @@ def chat_loop(enable_kb=True):
 
     while True:
         # 1. 用户输入
-        print("user：", end="", flush=True)
+        print("\n\n====== USER ======\n", end="", flush=True)
         pure_user_input = input()  # 构造临时消息
         if pure_user_input.strip().lower() == "q":
             print("结束对话。")
@@ -129,5 +135,5 @@ def chat_loop(enable_kb=True):
         # 删除增强 user_input
         messages.pop(insert_index)
 
-        # 原地插入纯净用户输入，避免知识库召回构造的增强用户提示词污染上下文，保持历史顺序一致
+        # 原地插入纯净用户输入，保持历史顺序一致
         messages.insert(insert_index, {"role": "user", "content": pure_user_input})
