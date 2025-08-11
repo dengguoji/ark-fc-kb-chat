@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<circuit version="1.4" xmlns="http://schemas.circuit-diagram.org/circuitDiagramDocument/2012/document">
+  <properties>
+    <width>1000</width>
+    <height>1000</height>
+  </properties>
+  <definitions></definitions>
+  <elements></elements>
+</circuit>
