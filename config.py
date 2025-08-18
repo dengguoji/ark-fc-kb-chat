@@ -6,8 +6,8 @@ import os
 API_KEY = os.getenv("ARK_API_KEY")
 
 # 方舟模型节点
-MODEL_NAME = "ep-20250611123221-wnqgm"  # seed 1.6 256K上下文 16K输出 disable reasoning
-MODEL_NAME_REASONING = "ep-20250711162541-6znl7"  # seed 1.6 256K上下文 16K输出
+MODEL_NAME = ""  # 通用模型endpoint
+MODEL_NAME_REASONING = ""  # 推理模型endpoint
 
 # Function Call的tools定义
 TOOLS = [

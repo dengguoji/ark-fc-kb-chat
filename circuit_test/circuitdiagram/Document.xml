@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<circuit version="1.4" xmlns="http://schemas.circuit-diagram.org/circuitDiagramDocument/2012/document">
+  <properties>
+    <width>1000</width>
+    <height>1000</height>
+  </properties>
+  <definitions>
+		<src col="http://schemas.circuit-diagram.org/circuitDiagramDocument/2012/components/common">
+			<add id="64" item="Resistor" p4:guid="dab6d52b-51a0-49b0-bc40-3cda966148aa"
+				p4:version="4.0.0"
+				xmlns:p4="http://schemas.circuit-diagram.org/circuitDiagramDocument/2012/document/component-descriptions" />
+			<add id="33" item="Inductor" p4:guid="e6ebc838-fb6a-4078-8d03-7fed04cc6938"
+				p4:version="2.0.0"
+				xmlns:p4="http://schemas.circuit-diagram.org/circuitDiagramDocument/2012/document/component-descriptions" />
+			<add id="16" item="Capacitor" p4:guid="154b7831-58e6-4126-b582-8c1cc2bdeb13"
+				p4:version="4.0.0"
+				xmlns:p4="http://schemas.circuit-diagram.org/circuitDiagramDocument/2012/document/component-descriptions" />
+			<add id="50" item="Op Amp" p4:guid="f13fcce0-ce24-4698-a7b7-31f4ee86e999"
+				p4:version="2.0.1"
+				xmlns:p4="http://schemas.circuit-diagram.org/circuitDiagramDocument/2012/document/component-descriptions" />
+			<add id="7" item="Alternative Ground" p4:guid="6d2faabd-1070-489b-a8d4-f5b839ccde5e"
+				p4:version=""
+				xmlns:p4="http://schemas.circuit-diagram.org/circuitDiagramDocument/2012/document/component-descriptions" />
+			<add id="68" item="Source" p4:guid="8979c617-b041-4069-8769-0b76dc0e6c52"
+				p4:version="1.2.1"
+				xmlns:p4="http://schemas.circuit-diagram.org/circuitDiagramDocument/2012/document/component-descriptions" />
+		</src>
+</definitions>
+  
+<elements>
+  <!-- ===== 电源与地 ===== -->
+  <c id="0"  tp="68" x="100" y="100" o="v" sz="10" flp="false">
+    <prs>
+      <p k="voltage"  v="5" />
+      <p k="t"        v="DC" />
+      <p k="showvoltage" v="true" />
+    </prs>
+  </c>
+
+  <c id="1"  tp="7"  x="100" y="400" o="h" sz="30" flp="false">
+    <prs><p k="type" v="Earth" /></prs>
+  </c>
+
+  <!-- ===== LC 输入滤波 ===== -->
+  <c id="2"  tp="33" x="200" y="100" o="h" sz="50" flp="false">
+    <prs>
+      <p k="text" v="L1" />
+      <p k="inductance" v="0.01" />
+      <p k="showInductance" v="true" />
+    </prs>
+  </c>
+
+  <c id="3"  tp="16" x="300" y="100" o="h" sz="50" flp="false">
+    <prs>
+      <p k="text" v="C2" />
+      <p k="capacitance" v="1e-7" />
+      <p k="showCapacitance" v="true" />
+    </prs>
+  </c>
+
+  <!-- ===== 分压网络 ===== -->
+  <c id="4"  tp="64" x="400" y="100" o="h" sz="50" flp="false">
+    <prs>
+      <p k="text" v="R1" />
+      <p k="resistance" v="1200" />
+      <p k="showResistance" v="true" />
+    </prs>
+  </c>
+
+  <c id="5"  tp="64" x="500" y="100" o="h" sz="50" flp="false">
+    <prs>
+      <p k="text" v="R2" />
+      <p k="resistance" v="2700" />
+      <p k="showResistance" v="true" />
+    </prs>
+  </c>
+
+  <c id="6"  tp="64" x="450" y="150" o="h" sz="50" flp="false">
+    <prs>
+      <p k="text" v="R3" />
+      <p k="resistance" v="1000" />
+      <p k="showResistance" v="true" />
+      <p k="t" v="Variable" />
+    </prs>
+  </c>
+
+  <!-- 滤波输出电容 -->
+  <c id="7"  tp="16" x="550" y="100" o="h" sz="50" flp="false">
+    <prs>
+      <p k="text" v="C1" />
+      <p k="capacitance" v="4.7e-9" />
+      <p k="showCapacitance" v="true" />
+    </prs>
+  </c>
+
+  <!-- ===== 第一级运放 IC1A ===== -->
+  <c id="8"  tp="50" x="650" y="100" o="h" sz="60" flp="false">
+    <prs><p k="showSupply" v="false" /></prs>
+  </c>
+
+  <c id="9"  tp="64" x="650" y="50"  o="h" sz="50" flp="false">
+    <prs>
+      <p k="text" v="R4" />
+      <p k="resistance" v="220" />
+      <p k="showResistance" v="true" />
+    </prs>
+  </c>
+
+  <c id="10" tp="64" x="650" y="150" o="h" sz="50" flp="false">
+    <prs>
+      <p k="text" v="R5" />
+      <p k="resistance" v="220" />
+      <p k="showResistance" v="true" />
+    </prs>
+  </c>
+
+  <c id="11" tp="64" x="650" y="200" o="h" sz="50" flp="false">
+    <prs>
+      <p k="text" v="R6" />
+      <p k="resistance" v="20000" />
+      <p k="showResistance" v="true" />
+    </prs>
+  </c>
+
+  <!-- ===== 第二级运放 IC1B ===== -->
+  <c id="12" tp="50" x="800" y="100" o="h" sz="60" flp="false">
+    <prs><p k="showSupply" v="false" /></prs>
+  </c>
+
+  <c id="13" tp="64" x="800" y="50"  o="h" sz="50" flp="false">
+    <prs>
+      <p k="text" v="R7" />
+      <p k="resistance" v="220000" />
+      <p k="showResistance" v="true" />
+    </prs>
+  </c>
+
+  <c id="14" tp="64" x="800" y="150" o="h" sz="50" flp="false">
+    <prs>
+      <p k="text" v="R8" />
+      <p k="resistance" v="27000" />
+      <p k="showResistance" v="true" />
+    </prs>
+  </c>
+
+  <c id="15" tp="64" x="800" y="200" o="h" sz="50" flp="false">
+    <prs>
+      <p k="text" v="R9" />
+      <p k="resistance" v="33000" />
+      <p k="showResistance" v="true" />
+    </prs>
+  </c>
+
+  <!-- ========================================================= -->
+  <!-- 导线：先布电源总线（+5 V）与地总线，再布信号线              -->
+  <!-- ========================================================= -->
+
+  <!-- +5 V 水平总线（y=100） -->
+  <w x="100" y="100" o="h" sz="750" flp="false" />
+
+  <!-- 地水平总线（y=400） -->
+  <w x="100" y="400" o="h" sz="750" flp="false" />
+
+  <!-- V2 上端连 +5 V 总线（已自动相连，可省） -->
+
+  <!-- L1 左端连 +5 V 总线 -->
+  <w x="175" y="100" o="v" sz="0"  flp="false" />
+
+  <!-- L1 右端 → C2 左端 -->
+  <w x="225" y="100" o="h" sz="50" flp="false" />
+
+  <!-- C2 右端 → 分压节点 -->
+  <w x="325" y="100" o="h" sz="50" flp="false" />
+
+  <!-- R1→R2→R3 串联到地 -->
+  <w x="425" y="100" o="h" sz="50" flp="false" />
+  <w x="525" y="100" o="h" sz="50" flp="false" />
+  <w x="575" y="100" o="v" sz="300" flp="false" /> <!-- R2右端下地 -->
+
+  <!-- C1 并联在 R2||R3 节点到地 -->
+  <w x="575" y="100" o="v" sz="300" flp="false" />
+
+  <!-- 分压输出 → IC1A +IN (pin 3) -->
+  <w x="600" y="100" o="h" sz="50" flp="false" />
+
+  <!-- IC1A 输出 → IC1B +IN (通过R6反馈) -->
+  <w x="680" y="100" o="h" sz="120" flp="false" />
+
+  <!-- IC1B 输出 -->
+  <w x="830" y="100" o="h" sz="50" flp="false" />
+
+  <!-- 上拉 / 下拉电阻到电源/地 -->
+  <w x="650" y="50"  o="v" sz="50"  flp="false" /> <!-- R4 → +5 V -->
+  <w x="650" y="150" o="v" sz="250" flp="false" /> <!-- R5 → GND -->
+  <w x="650" y="200" o="v" sz="200" flp="false" /> <!-- R6 → GND -->
+
+  <w x="800" y="50"  o="v" sz="50"  flp="false" /> <!-- R7 → +5 V -->
+  <w x="800" y="150" o="v" sz="250" flp="false" /> <!-- R8 → GND -->
+  <w x="800" y="200" o="v" sz="200" flp="false" /> <!-- R9 → GND -->
+
+</elements>
+
+</circuit>

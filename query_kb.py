@@ -3,10 +3,10 @@ import hashlib
 import requests
 import urllib.parse
 
-APP_ID = "108366570"
-APP_KEY = "505870fc0ee84799bd0dc424fe9de9bb"
-ROBOT_ID = "a3dd2847e721440193cd40a349521b21"
-ENDPOINT = "https://robot.chaoxing.com/v1/api-agent/recallKnowledgeVector"
+APP_ID = ""
+APP_KEY = ""
+ROBOT_ID = ""
+ENDPOINT = ""
 
 # 设定参数
 score_threshold = 0.4  # 设定分数阈值
